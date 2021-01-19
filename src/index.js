@@ -6,6 +6,7 @@ const session = require('express-session');
 
 //INITIALIZATIONS
 const app = express();
+require('./database');
 
 //SETTINGS
 
@@ -38,6 +39,7 @@ app.use(require('./routes/notes'));
 app.use(require('./routes/users'));
 
 //STATIC FILES
+app.use(express.static(path.join(__dirname, 'public')));
 
 //SERVER START
 app.listen(app.get('port'), () => {
