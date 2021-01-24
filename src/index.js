@@ -10,11 +10,12 @@ require('./database');
 
 //SETTINGS
 
-// -> Si existe un puertom, lo toma sino pilla el puerto 3000
+// -> Si existe un puerto, lo toma sino pilla el puerto 3000
 app.set('port', process.env.PORT | 3000);
 app.set('views', path.join(__dirname, 'views'));
 app.engine('.hbs', exphbs({
     defaultLayout: 'main',
+    //el 'path-join' simplemente sirve para indicale la ruta de donde se encuentran los archivos
     layoutsDir: path.join(app.get('views'), 'layouts'),
     partialsDir: path.join(app.get('views'), 'partials'),
     extname: '.hbs'
