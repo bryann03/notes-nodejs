@@ -9,7 +9,7 @@ router.get('/notes/add', (request, response) => {
 });
 
 router.post('/notes/new-note', async (request, response) => {
-    //DESESTRUCTURACIÓN
+    //DESESTRUCT
     const {title, description} = request.body;
     //VALIDACIÓN DE ERRORES
     const errors = [];
