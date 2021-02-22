@@ -2,11 +2,13 @@ const { response, request } = require('express');
 const express = require('express');
 const router = express.Router();
 
+const Note = require('../models/Note');
+
 router.get('/notes/add', (request, response) => {
     response.render('notes/new-note');
 });
 
-router.post('/notes/new-note', (request, response) => {
+router.post('/notes/new-note', async (request, response) => {
     //DESESTRUCTURACIÓN
     const {title, description} = request.body;
     //VALIDACIÓN DE ERRORES
@@ -17,7 +19,7 @@ router.post('/notes/new-note', (request, response) => {
     if(!description){
         errors.push({text: 'Please insert a description'});
     }
-    //SI EXISTEN ERRORES, RENDERIZAMOS OTRAVES LA VISTA DEL FORM Y LE PASAMOS LA LISTA DE ERRORES
+    //SI EXISTEN ERRORES, RENDERIZAMOS OTRA VEZ LA VISTA DEL FORM Y LE PASAMOS LA LISTA DE ERRORES
     if(errors.length > 0){
         response.render('notes/new-note', {
             errors,
@@ -26,12 +28,27 @@ router.post('/notes/new-note', (request, response) => {
         });
     }
     else{
-        response.send('ok');
+        const newNote = new Note({title, description});
+        await newNote.save();
+        response.redirect('/notes');
     }
 });
 
-router.get('/notes', (request, response) => {
-    response.send('TODAS LAS NOTAS');
+router.get('/notes', async (request, response) => {
+    //EL '.lean()' PARA OBTENERLO EN FORMATO JSON-OBJECT
+    const datosNotes = await Note.find().lean().sort({date: 'desc'});
+    response.render('notes/all-notes', { datosNotes });
+});
+
+router.get('/notes/edit/:id', async (request, response) => {
+    const note = await Note.findById(request.params.id).lean();
+    response.render('notes/edit-note', {note});
+});
+
+router.put('/notes/edit-note/:id', async (request, response) => {
+    const {title, description} = request.body;
+    await Note.findByIdAndUpdate(request.params.id, {title, description});
+    response.redirect('/notes');
 });
 
 module.exports = router;
