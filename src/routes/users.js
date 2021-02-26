@@ -27,7 +27,7 @@ router.post('/users/signup', async (request, response) => {
         response.render('users/signup', {errors, name, email, password, confirm_password});
     }
     else{
-        const emailUser = User.findOne({email: email});
+        const emailUser = await User.findOne({email: email});
         if(emailUser){
             request.flash('error_msg', 'The email is already in use');
             response.redirect('/users/signup');
