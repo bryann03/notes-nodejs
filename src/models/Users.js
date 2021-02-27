@@ -10,7 +10,7 @@ const UserSchema = new Schema({
     date: { type: Date, default: Date.now }
 });
 
-//MÉTODO PARA CIFRAR CONGRASEÑAS USANDO 'bcryptJS'
+//MÉTODO PARA CIFRAR CONTRASEÑAS USANDO 'bcryptJS'
 UserSchema.methods.encryptPassword = async (password) => {
    const salt = await bcrypt.genSalt(10);
    const hash = bcrypt.hash(password, salt);
