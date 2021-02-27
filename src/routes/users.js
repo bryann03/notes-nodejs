@@ -7,6 +7,11 @@ router.get('/users/signin', (request, response) => {
     response.render('users/signin');
 });
 
+// router.post('/users/signin', (request, response) => {
+//     const {email, passsword} = request.body;
+
+// });
+
 router.get('/users/signup', (request, response) => {
     response.render('users/signup');
 });

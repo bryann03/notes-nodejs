@@ -20,3 +20,14 @@ passport.use(new LocalStrategy({
         return done(null, false, {message: 'User not found!'});
     }
 }));
+
+passport.serializeUser( (user, done) => {
+    done(null, user.id);
+});
+
+passport.deserializeUser( async (id_user, done) => {
+    const user = await User.findById({_id: id_user});
+    if( user ){
+        done(null, user);
+    }
+});
