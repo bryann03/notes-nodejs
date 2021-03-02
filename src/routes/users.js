@@ -2,15 +2,25 @@ const { request } = require('express');
 const express = require('express');
 const router = express.Router();
 const User = require('../models/Users');
+const passport = require('passport');
 
 router.get('/users/signin', (request, response) => {
     response.render('users/signin');
 });
 
-// router.post('/users/signin', (request, response) => {
-//     const {email, passsword} = request.body;
+//USAMO MÉTODO DE 'express/passport' DIRECTAMENTE PARA HACER EL 'logout'
+router.get('/users/logout', (request, response) => {
+    request.logout();
+    response.redirect('/');
+});
 
-// });
+//AL passport.authenticate() LE PASAMOS EL NOMBRE DE LA AUTENTICACIÓN, EL CUAL POR DEFECTO ES 'local'
+router.post('/users/signin', passport.authenticate('local', {
+    //CONTROL DE ERRORES/SUCCESS
+    successRedirect: '/notes',
+    failureRedirect: '/users/signin',
+    failureFlash: true
+}));
 
 router.get('/users/signup', (request, response) => {
     response.render('users/signup');

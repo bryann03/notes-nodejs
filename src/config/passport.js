@@ -8,7 +8,7 @@ passport.use(new LocalStrategy({
     //Busqueda en BBDD
     const user = await User.findOne({email: email});
     if( user ){
-        const matchPassword = await User.matchPassword(password);
+        const matchPassword = await user.matchPassword(password);
         if(matchPassword){
             return done(null, user);
         }
