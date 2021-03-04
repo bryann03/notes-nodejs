@@ -1,7 +1,7 @@
 const { response, request } = require('express');
 const express = require('express');
 const router = express.Router();
-
+const { isAuth } = require('../helpers/auth');
 const Note = require('../models/Note');
 
 router.get('/notes/add', (request, response) => {
