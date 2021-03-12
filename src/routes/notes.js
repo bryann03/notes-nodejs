@@ -29,16 +29,25 @@ router.post('/notes/new-note', async (request, response) => {
     }
     else{
         const newNote = new Note({title, description});
-        await newNote.save();
-        request.flash('success_msg', 'Note added successfully!');
-        response.redirect('/notes');
+        newNote.user = request.user.id;
+        try {
+            await newNote.save();
+            request.flash('success_msg', 'Note added successfully!');
+            response.redirect('/notes');
+        } catch (error) {
+            console.log(error);
+        }
     }
 });
 
 router.get('/notes', async (request, response) => {
     //EL '.lean()' PARA OBTENERLO EN FORMATO JSON-OBJECT
-    const datosNotes = await Note.find().lean().sort({date: 'desc'});
-    response.render('notes/all-notes', { datosNotes });
+    try {
+        const datosNotes = await Note.find({user: request.user.id}).lean().sort({date: 'desc'});
+        response.render('notes/all-notes', { datosNotes });
+    } catch (error) {
+        console.log(error);
+    }
 });
 
 router.get('/notes/edit/:id', async (request, response) => {
